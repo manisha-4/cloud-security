@@ -1,15 +1,16 @@
 name: Assume Role via OIDC and Call AWS STS GetCallerIdentity
 on:
-workflow_disptach:
-  inputs:
-    Operations:
-      type: choice
-      options:
-        - 'Apply'
-        - 'Destroy'
-      description: 'whether to create/update/delete infra'
-      required: true
-      default: 'create update'
+  workflow_disptach:
+    inputs:
+      Operations:
+        description: 'Select Operation'
+        required: true
+        default: 'Apply'
+        type: choice
+        options:
+          - Apply
+          - Destroy
+                
   
  
 
