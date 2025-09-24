@@ -1,9 +1,17 @@
-
+name: Assume Role via OIDC and Call AWS STS GetCallerIdentity
 on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+workflow_disptach:
+  inputs:
+    Operations:
+      type: choice
+      options:
+        - 'Apply'
+        - 'Destroy'
+      description: 'whether to create/update/delete infra'
+      required: true
+      default: 'create update'
+  
+ 
 
 env:
   
@@ -14,22 +22,22 @@ permissions:
       id-token: write   
       contents: read    
 jobs:
-  AssumeRoleAndCallIdentity:
+  Create_infra:
+    name: Create/Update Infra
+    if: ${{ github.event.inputs.Operations == 'Apply' }}
     runs-on: ubuntu-latest
     steps:
       - name: Git clone the repository
         uses: actions/checkout@v3
+
       - name: configure aws credentials
         uses: aws-actions/configure-aws-credentials@v1.7.0
         with:
           role-to-assume: "arn:aws:iam::529875232668:role/tf_deploy" #change to reflect your IAM role’s ARN
           role-session-name: GitHub_to_AWS_via_FederatedOIDC
-          #aws-region: ${{ env.AWS_REGION }}
-      # Hello from AWS: WhoAmI
+          aws-region: ${{ env.AWS_REGION }}
+      
       - name: Sts GetCallerIdentity
         run: |
           aws sts get-caller-identity
-#       - name: Run a multi-line script
-#         run: |
-#           echo Add other actions to build,
-#           echo test, and deploy your project.
+          echo "AWS Role Assumed Successfully"
