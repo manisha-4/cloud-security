@@ -1,6 +1,6 @@
 name: Assume Role via OIDC and Call AWS STS GetCallerIdentity
 on:
-  workflow_disptach:
+  workflow_dispatch:
     inputs:
       Operations:
         description: 'Select Operation'
